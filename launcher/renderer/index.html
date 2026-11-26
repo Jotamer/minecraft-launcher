@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:">
+  <title>3AM Studios Launcher</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="themes.js"></script>
+  <script src="theme.js"></script>
+</head>
+<body>
+  <div id="titlebar"><img data-logo alt=""><span>3AM Launcher</span></div>
+
+  <!-- Pantalla de carga -->
+  <div id="splash" role="status" aria-live="polite">
+    <img data-logo alt="3AM Studios">
+    <p>Inicializando 3AM Studios launcher</p>
+    <div class="bar"><i id="splash-fill"></i></div>
+  </div>
+
+  <section id="login" class="center" hidden>
+    <div class="lg-card">
+      <!-- INICIO DE SESION -->
+      <div id="lg-login" class="lg-screen">
+        <img class="lg-logo" data-logo alt="3AM Studios">
+        <h1 class="px-title">INICIO DE SESION</h1>
+        <p class="px-sub">Con la cuenta que te otorgarán los administradores</p>
+        <form id="login-form" class="lg-form">
+          <label class="field"><span>Nombre de usuario</span><input id="l-user" type="text" autocomplete="username" maxlength="16" required></label>
+          <label class="field"><span>Contraseña</span><input id="l-pass" type="password" autocomplete="current-password" required></label>
+          <button id="btn-login" class="px-btn" type="submit">INICIAR SESION</button>
+        </form>
+        <p id="login-err" class="lg-msg"></p>
+        <button type="button" id="go-request" class="px-link">¿No tienes cuenta?</button>
+        <button type="button" id="go-restore" class="px-link">¿Olvidaste tu contraseña?</button>
+        <div id="saved" class="saved" hidden><div id="saved-list"></div></div>
+      </div>
+
+      <!-- SOLICITUD DE CUENTA -->
+      <div id="lg-request" class="lg-screen" hidden>
+        <button type="button" class="px-back" data-back><svg class="px-arrow" viewBox="0 0 10 8" width="20" height="16" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M3 0h1v1H3zM2 1h2v1H2zM1 2h3v1H1zM0 3h10v2H0zM1 5h3v1H1zM2 6h2v1H2zM3 7h1v1H3z"/></svg><span>Volver</span></button>
+        <img class="lg-logo" data-logo alt="3AM Studios">
+        <h1 class="px-title">SOLICITUD DE CUENTA</h1>
+        <p class="px-sub">Solicitar una cuenta a los administradores para poder ingresar al launcher</p>
+        <form id="rq-form" class="lg-form">
+          <label class="field"><span>Nombre de usuario</span><input id="rq-user" type="text" maxlength="16" autocomplete="off" required></label>
+          <button id="rq-btn" class="px-btn" type="submit">SOLICITAR CUENTA</button>
+        </form>
+        <p id="rq-msg" class="lg-msg"></p>
+      </div>
+
+      <!-- RESTAURACION DE CUENTA -->
+      <div id="lg-restore" class="lg-screen" hidden>
+        <button type="button" class="px-back" data-back><svg class="px-arrow" viewBox="0 0 10 8" width="20" height="16" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M3 0h1v1H3zM2 1h2v1H2zM1 2h3v1H1zM0 3h10v2H0zM1 5h3v1H1zM2 6h2v1H2zM3 7h1v1H3z"/></svg><span>Volver</span></button>
+        <img class="lg-logo" data-logo alt="3AM Studios">
+        <h1 class="px-title">RESTAURACION DE CUENTA</h1>
+        <p class="px-sub">Envía una solicitud de cambio de contraseña a los moderadores</p>
+        <form id="rs-form" class="lg-form">
+          <label class="field"><span>Nombre de usuario</span><input id="rs-user" type="text" maxlength="16" autocomplete="off" required></label>
+          <label class="field"><span>Tu nombre de usuario en Discord</span><input id="rs-discord" type="text" maxlength="37" autocomplete="off" required></label>
+          <button id="rs-btn" class="px-btn" type="submit">SOLICITAR RESTAURACION</button>
+        </form>
+        <p id="rs-msg" class="lg-msg"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="app" hidden>
+    <aside>
+      <div class="brand"><img data-logo alt=""><span>3AM STUDIOS<br>LAUNCHER</span></div>
+      <nav class="side-nav">
+        <button id="nav-home" class="nav-btn" type="button">INICIO</button>
+        <button id="nav-inst" class="nav-btn" type="button">INSTANCIAS</button>
+      </nav>
+      <div class="side-foot">
+        <button id="nav-support" class="nav-btn" type="button">
+          <!-- Ícono Lucide Headset para Soporte -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pxi"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          <span id="inbox-label">SOPORTE</span>
+        </button>
+        <button id="nav-opts" class="nav-btn" type="button"><i data-icon="gear"></i><span>AJUSTES</span></button>
+        <button id="nav-profile" class="nav-btn" type="button"><span id="nav-pfp" class="pfpslot"></span><span>PERFIL</span></button>
+      </div>
+    </aside>
+
+    <!-- INICIO -->
+    <main id="view-home" class="home" hidden>
+      <div class="home-head">
+        <h2 class="px-h">INICIO</h2>
+        <button id="home-gear" class="px-sq" type="button" hidden data-tip="Elegir el modpack destacado" aria-label="Elegir el modpack destacado"><i data-icon="gear"></i></button>
+      </div>
+      <div class="home-body">
+        <p class="px-cap">Instancia principal</p>
+        <div class="home-grid">
+          <button id="feat" class="feat" type="button">
+            <span id="feat-art" class="feat-art"></span>
+            <span id="feat-badge" class="feat-badge" hidden></span>
+            <span id="feat-name" class="feat-name"></span>
+          </button>
+          <section class="online">
+            <p class="px-h2">USUARIOS CONECTADOS:</p>
+            <div id="online-list"></div>
+            <div class="online-foot">
+              <p id="online-feat" class="px-h2"></p>
+              <button id="home-log" class="play full" type="button">ULTIMO CHANGELOG</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- INSTANCIAS (selección) -->
+    <main id="view-instances" class="page" hidden>
+      <div class="page-head"><h2 class="px-h">INSTANCIAS</h2></div>
+      <div class="page-body"><div id="cards" class="cards"></div></div>
+    </main>
+
+    <!-- INSTANCIA (detalle) -->
+    <main id="view-instance" class="page" hidden>
+      <div class="page-head">
+        <button class="px-back" type="button" data-goto="instances"><i data-icon="arrow"></i><span>Volver</span></button>
+        <h2 id="in-title" class="px-h"></h2>
+        <button id="in-gear" class="px-sq" type="button" hidden data-tip="Modificar instancia" aria-label="Modificar instancia"><i data-icon="gear"></i></button>
+      </div>
+      <div class="page-body"><div id="detail"></div></div>
+    </main>
+
+    <!-- SOPORTE (jugadores y beta testers) -->
+    <main id="view-support" class="page flat" hidden>
+      <div class="page-head"><h2 class="px-h">SOPORTE</h2></div>
+      <div class="page-body support">
+        <div class="sp-box">
+          <!-- Motivo del mensaje situado ARRIBA (Ley de Jakob) -->
+          <div class="sp-row-top">
+            <label class="sl" for="sp-reason-select">Motivo del mensaje:</label>
+            <div class="selwrap">
+              <select id="sp-reason-select" class="px-in">
+                <option value="Solicitud">Solicitud</option>
+                <option value="Reporte de bugs">Reporte de bugs</option>
+                <option value="Pregunta">Pregunta</option>
+                <option value="Comentario/Idea">Comentario / Idea</option>
+                <option value="Reporte de jugador">Reporte de jugador</option>
+                <option value="OTRO">Otro</option>
+              </select>
+              <i data-icon="chev"></i>
+            </div>
+            <!-- Campo desplegable para "Otro" -->
+            <div id="sp-other-wrapper" style="display: none; margin-top: 6px;">
+              <input id="sp-other-text" class="px-in" type="text" placeholder="Especifica el motivo de tu mensaje..." maxlength="60">
+            </div>
+          </div>
+
+          <p class="px-note" style="margin: 6px 0;">Escribe lo que quieras comentarle al staff del launcher. Solo lo pueden ver los moderadores.</p>
+
+          <textarea id="sp-text" class="px-in area" maxlength="1000" placeholder="Escribe tu mensaje..."></textarea>
+          <p id="sp-count" class="smsg right">0 / 1000</p>
+
+          <!-- Botón de envío a la DERECHA -->
+          <div class="sp-row-bottom">
+            <button id="sp-send" class="play" type="button">ENVIAR MENSAJE</button>
+          </div>
+          <p id="sp-msg" class="smsg"></p>
+        </div>
+      </div>
+    </main>
+
+    <!-- MENSAJES (moderadores) -->
+    <main id="view-inbox" class="page flat" hidden>
+      <div class="page-head"><h2 class="px-h">MENSAJES</h2></div>
+      <div class="page-body inbox">
+        <p class="px-note">Mensajes enviados por los jugadores para el staff</p>
+        <div class="inbox-bar"><button id="inbox-readall" class="play neutral sm" type="button">MARCAR TODOS COMO LEIDOS</button></div>
+        <p id="inbox-msg" class="smsg"></p>
+        <div id="inbox-list"></div>
+      </div>
+    </main>
+
+    <!-- AJUSTES -->
+    <main id="view-settings" class="page" hidden>
+      <div class="page-head"><h2 class="px-h">AJUSTES</h2></div>
+      <div class="page-body">
+        <div class="boxes">
+          <section class="sbox">
+            <h3 class="sbox-t">CONFIGURACION DE INSTALACIONES</h3>
+            <div class="srow">
+              <label class="sl">Carpeta de instancias :</label>
+              <div class="sc">
+                <input id="gs-dir" class="px-in" readonly>
+                <div class="sbtns"><button id="gs-dir-open" class="play neutral sm" type="button">ABRIR</button><button id="gs-dir-reset" class="play neutral sm" type="button">RESTAURAR</button><button id="gs-dir-change" class="play sm" type="button">CAMBIAR CARPETA</button></div>
+                <p id="gs-dir-msg" class="smsg"></p>
+              </div>
+            </div>
+            <div class="srow">
+              <label class="sl">Argumentos JVM globales :</label>
+              <div class="sc">
+                <textarea id="gs-jvm" class="px-in area sm" spellcheck="false" placeholder="JVM ARGUMENTS (ejemplo: -XX:+UseG1GC)"></textarea>
+                <div class="sbtns"><button id="gs-jvm-reset" class="play neutral sm" type="button">RESTAURAR</button><button id="gs-jvm-save" class="play sm" type="button">GUARDAR CAMBIOS</button></div>
+                <p id="gs-jvm-msg" class="smsg"></p>
+              </div>
+            </div>
+            <div class="srow">
+              <label class="sl">Memoria RAM máxima global :</label>
+              <div class="sc">
+                <div class="ramrow"><input id="gs-ram" class="px-range" type="range"><input id="gs-ram-n" class="px-in num" type="number"><span class="unit">MB</span></div>
+                <p id="gs-ram-hint" class="smsg"></p>
+                <div class="sbtns"><button id="gs-ram-reset" class="play neutral sm" type="button">RESTAURAR</button><button id="gs-ram-save" class="play sm" type="button">GUARDAR CAMBIOS</button></div>
+                <p id="gs-ram-msg" class="smsg"></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="sbox">
+            <h3 class="sbox-t">PERSONALIZACION</h3>
+            <div class="srow">
+              <label class="sl">Temas:</label>
+              <div class="sc"><div class="selwrap"><select id="th-select" class="px-in"></select><i data-icon="chev"></i></div></div>
+            </div>
+            <div class="srow">
+              <label class="sl">Colores de tema:</label>
+              <div class="sc"><div id="th-swatches" class="swatches"></div></div>
+            </div>
+            <div class="srow">
+              <label class="sl">Logos:</label>
+              <div class="sc"><div id="th-logos" class="logos"></div></div>
+            </div>
+            <div class="srow center">
+              <div class="sc wide">
+                <p id="th-warn" class="smsg bad"></p>
+                <div class="sbtns mid"><button id="th-reset" class="play neutral sm" type="button">RESTABLECER</button><button id="th-save" class="play sm" type="button">GUARDAR Y APLICAR</button></div>
+                <p id="th-msg" class="smsg"></p>
+              </div>
+            </div>
+          </section>
+
+          <section id="box-upload" class="sbox" hidden>
+            <h3 class="sbox-t">SUBIR INSTANCIA</h3>
+            <div id="gh-box" class="srow" hidden>
+              <label class="sl">Token de GitHub :</label>
+              <div class="sc">
+                <input id="f-token" class="px-in" type="password" placeholder="github_pat_...">
+                <p class="smsg">Con permiso de escritura en el repositorio de modpacks. Se guarda cifrado en este equipo.</p>
+                <div class="sbtns"><button id="btn-token" class="play neutral sm" type="button">GUARDAR TOKEN</button></div>
+              </div>
+            </div>
+            <div class="srow"><label class="sl">Nombre de instancia :</label><div class="sc"><input id="f-name" class="px-in" type="text" maxlength="60"></div></div>
+            <div class="srow"><label class="sl">Código de instancia :</label><div class="sc"><input id="f-code" class="px-in" type="number" min="1" step="1"><p id="code-hint" class="smsg"></p></div></div>
+            <div id="loader-box">
+              <div class="srow"><label class="sl">Loader :</label><div class="sc"><div class="selwrap"><select id="f-loader" class="px-in"><option value="neoforge">NeoForge</option><option value="fabric">Fabric</option></select><i data-icon="chev"></i></div></div></div>
+              <div class="srow"><label class="sl">Versión de Minecraft :</label><div class="sc"><div class="selwrap"><select id="f-mc" class="px-in"></select><i data-icon="chev"></i></div></div></div>
+              <div class="srow"><label class="sl">Versión del loader :</label><div class="sc"><div class="selwrap"><select id="f-lv" class="px-in"></select><i data-icon="chev"></i></div></div></div>
+            </div>
+            <p id="loader-hint" class="smsg pad"></p>
+            <div class="srow"><label class="sl">Versión :</label><div class="sc"><input id="f-ver" class="px-in" type="text" placeholder="1.1.1 o testing 1.1.1"></div></div>
+            <div class="srow">
+              <label class="sl">Archivo .zip :</label>
+              <div class="sc"><div id="drop" class="drop"><p id="drop-txt">Arrastra aquí el archivo .zip de la instancia</p><button id="btn-pick" class="play neutral sm" type="button">ELEGIR ARCHIVO</button></div></div>
+            </div>
+            <div class="srow">
+              <label class="sl">Cambios del modpack (opcional) :</label>
+              <div class="sc">
+                <div id="drop-md" class="drop"><p id="drop-md-txt">Arrastra aquí cambiosModpack.md</p><div class="sbtns mid"><button id="btn-pick-md" class="play neutral sm" type="button">ELEGIR ARCHIVO</button><button id="btn-clear-md" class="play neutral sm" type="button" hidden>QUITAR</button></div></div>
+                <p class="smsg">Se sube junto al modpack y los jugadores lo leen en CHANGELOGS sin instalar la instancia.</p>
+              </div>
+            </div>
+            <div class="srow center">
+              <div class="sc wide">
+                <div class="sbtns mid"><button id="btn-publish" class="play sm" type="button">PUBLICAR</button></div>
+                <div class="bar" id="a-bar" hidden><i id="a-fill"></i></div>
+                <p id="a-msg" class="smsg"></p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- PERFIL -->
+    <main id="view-profile" class="page flat" hidden>
+      <div class="page-head">
+        <h2 class="px-h">PERFIL</h2>
+        <button id="btn-modtools" class="px-sq" type="button" hidden data-tip="Administrar cuentas (moderadores)" aria-label="Administrar cuentas"><i data-icon="gear"></i></button>
+      </div>
+      <div class="page-body">
+        <div class="pcard">
+          <span id="pf-pfp" class="pfpslot"></span>
+          <div class="pwho"><p id="ac-name" class="px-h"></p><p id="ac-role" class="prole"></p></div>
+          <button id="btn-switch" class="play neutral" type="button">CAMBIAR DE CUENTA</button>
+        </div>
+        <div class="pcols">
+          <section class="pcol">
+            <p class="px-h2">CAMBIO DE CONTRASENA:</p>
+            <label class="sl">Contraseña actual</label>
+            <input id="p-cur" class="px-in" type="password" autocomplete="current-password">
+            <label class="sl">Contraseña nueva (mínimo de 8 caracteres)</label>
+            <input id="p-new" class="px-in" type="password" autocomplete="new-password">
+            <button id="btn-pass" class="play" type="button">GUARDAR CONTRASENA</button>
+            <p id="p-msg" class="smsg"></p>
+          </section>
+          <section class="pcol">
+            <p class="px-h2">CAMBIO IMAGEN DE PERFIL:</p>
+            <!-- Botón estructurado con ícono SVG Upload -->
+            <button id="pf-pick" class="btn-upload" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Subir imagen</span>
+            </button>
+            <p class="smsg">PNG o JPG. Se recorta al centro y se reduce a 256x256.</p>
+            <button id="pf-save" class="play" type="button">CAMBIAR FOTO DE PERFIL</button>
+            <p id="pf-msg" class="smsg"></p>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- Administrar Cuentas -->
+    <main id="view-manage" class="page" hidden>
+      <div class="page-head">
+        <button id="btn-back-acc" class="px-back" type="button"><i data-icon="arrow"></i><span>Volver</span></button>
+        <h2 class="px-h">ADMINISTRAR CUENTAS</h2>
+      </div>
+      <div class="page-body"><div class="narrow">
+        <p class="muted">El usuario debe ser exactamente el nombre de Minecraft Java del jugador. Entrega la contraseña inicial en privado.</p>
+        <div class="row">
+          <input id="u-name" class="px-in" type="text" placeholder="Usuario" maxlength="16">
+          <input id="u-pass" class="px-in" type="text" placeholder="Contraseña inicial">
+          <button id="btn-gen" class="play neutral sm" type="button">GENERAR</button>
+        </div>
+        <div class="row">
+          <span class="selwrap grow"><select id="u-role" class="px-in"><option value="player">Jugador</option><option value="beta">Beta Tester</option><option value="moderator">Moderador</option></select><i data-icon="chev"></i></span>
+          <button id="btn-create" class="play sm" type="button">CREAR CUENTA</button>
+        </div>
+        <p id="u-msg" class="muted"></p>
+        <div id="u-list"></div>
+      </div></div>
+    </main>
+
+    <!-- Modificar Instancia -->
+    <main id="view-edit" class="page" hidden>
+      <div class="page-head">
+        <button class="px-back" type="button" data-goto="instances"><i data-icon="arrow"></i><span>Volver</span></button>
+        <h2 id="e-title" class="px-h"></h2>
+      </div>
+      <div class="page-body">
+        <div class="boxes">
+          <section class="sbox">
+            <h3 class="sbox-t">MODIFICAR INSTANCIA</h3>
+            <div class="srow">
+              <label class="sl">Código de instancia :</label>
+              <div class="sc"><div class="selwrap"><select id="e-code" class="px-in"></select><i data-icon="chev"></i></div></div>
+            </div>
+            <div class="srow">
+              <label class="sl">Versión del loader :</label>
+              <div class="sc"><div class="selwrap"><select id="e-lv" class="px-in"></select><i data-icon="chev"></i></div></div>
+            </div>
+            <div class="srow">
+              <label class="sl">Versión :</label>
+              <div class="sc"><div class="selwrap"><select id="e-ver" class="px-in"></select><i data-icon="chev"></i></div></div>
+            </div>
+            <p id="e-hint" class="smsg pad"></p>
+            <div class="srow">
+              <label class="sl">Archivo .zip :</label>
+              <div class="sc"><div id="e-drop" class="drop"><p id="e-drop-txt">Arrastra aquí el archivo .zip de la instancia</p><button id="e-pick" class="play neutral sm" type="button">ELEGIR ARCHIVO</button></div></div>
+            </div>
+            <div class="srow">
+              <label class="sl">Registro de cambios (opcional) :</label>
+              <div class="sc">
+                <div id="e-drop-md" class="drop"><p id="e-drop-md-txt">Arrastra aquí cambiosModpack.md (opcional)</p><div class="sbtns mid"><button id="e-pick-md" class="play neutral sm" type="button">ELEGIR ARCHIVO</button></div></div>
+                <p id="e-md-hint" class="smsg"></p>
+              </div>
+            </div>
+            <div class="srow center">
+              <div class="sc wide">
+                <div class="sbtns mid">
+                  <button id="btn-del" class="play danger sm" type="button">BORRAR INSTANCIA</button>
+                  <button id="btn-mod" class="play sm" type="button">MODIFICAR INSTANCIA</button>
+                </div>
+                <div class="bar" id="a-bar-e" hidden><i id="a-fill-e"></i></div>
+                <p id="e-msg" class="smsg"></p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+  <div id="overlay" hidden><div id="dialog" role="dialog" aria-modal="true"></div></div>
+  <div id="tip" hidden></div>
+  <div id="toast" hidden></div>
+  <div class="px-version">3AM Studios Launcher<br>Versión <span id="app-ver">1.1.5</span></div>
+  <script src="icons.js"></script>
+  <script src="markdown.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

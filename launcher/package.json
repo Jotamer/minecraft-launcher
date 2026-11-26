@@ -1,0 +1,53 @@
+{
+  "name": "3am-launcher",
+  "version": "1.1.5",
+  "description": "LAUNCHER DE MINECRAFT DE 3AM STUDIOS",
+  "author": "Mister_Jota",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "dependencies": {
+    "extract-zip": "^2.0.1",
+    "minecraft-launcher-core": "^3.18.2",
+    "discord-rpc": "^4.0.1"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    
+    "appId": "com.3amstudios.launcher",
+    "productName": "3AM Launcher",
+    "copyright": "Copyright © 2026 Mister_Jota",
+    
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    
+    "files": [
+      "main.js",
+      "preload.js",
+      "config.json",
+      "src/**",
+      "renderer/**"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "3AM Launcher",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
+    }
+  },
+  "allowScripts": {
+    "electron@33.4.11": true
+  }
+}
